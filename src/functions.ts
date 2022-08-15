@@ -2,7 +2,7 @@ import { arrayLength, joinNumber, lastArrayItem, getArrayEl } from './auxFunctio
 import { arrayOfNumber, casas, hundredTohundred, imutaveis, tenMutiples } from './arrays'
 
 
-export function splitNum(num:number){
+function splitNum(num:number){
     const splited:(string | number)[] = num.toString().split('')
     splited.forEach(el => {
         arrayOfNumber.push(Number(el))
