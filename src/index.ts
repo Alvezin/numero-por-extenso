@@ -2,4 +2,4 @@
 import { index } from   './functions'
 
 
-console.log(index(3101))
+console.log(index(811111))

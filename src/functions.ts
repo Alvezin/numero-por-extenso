@@ -41,35 +41,29 @@ function getLessThousand(num1index:number, num2Index:number, num3Index:number){
 
 
 function ThousandFirstPart(){
-    const numberlength = arrayLength(arrayOfNumber)
-    let firstPart:string
-    switch (numberlength) {
-        case 4:
-            return firstPart = `${getArrayEl(imutaveis, arrayOfNumber[0])} mil`;
-            break;
-        case 5:
-            //return firstPart = `${}`
-            break;
+    if(arrayOfNumber.length === 4){
+        return `${getArrayEl(imutaveis, arrayOfNumber[0])} mil`;
+    }
+    if(arrayOfNumber.length === 5){
+
+        if(joinNumber(arrayOfNumber[0], arrayOfNumber[1]) < 20){
+
+            return `${getArrayEl(imutaveis, joinNumber(arrayOfNumber[0], arrayOfNumber[1]))} mil`
+        }
+        return `${getLessHundred(0, 1)} mil`;
+    }
+    if(arrayOfNumber.length > 5){
+        return `${getLessThousand(arrayLength(arrayOfNumber) - 6, arrayLength(arrayOfNumber) - 5, arrayLength(arrayOfNumber) - 4)} mil`;
     }
 }
 
 function getLessMillion(){
-    const firstPart =  `${getArrayEl(imutaveis, arrayOfNumber[0])} mil`;
+    const firstPart =  `${ThousandFirstPart()}`;
 
-    const secondPart = `${getLessThousand(1, 2, 3)}`;
+    const secondPart = `${getLessThousand(arrayLength(arrayOfNumber) - 3, arrayLength(arrayOfNumber) - 2, arrayLength(arrayOfNumber) - 1)}`;
     
-    const alternativeSecond = `${getLessHundred(2, 3)}`
-    
-    const condition = `${getArrayEl(arrayOfNumber, 1) > 0 ? secondPart :  alternativeSecond}`
-    
-    return `${firstPart} ${condition}`
+    return `${firstPart} ${secondPart}`
 }
-
-
-
-
-
-
 
 export function index(num:number){
     splitNum(num)
