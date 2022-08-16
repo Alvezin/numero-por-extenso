@@ -1,4 +1,4 @@
 // desafio: GERAR UM NÚMERO POR EXTENSO 
-import {index} from './functions'
+import toExtense from './functions'
 
-console.log(index(811111))
+console.log(toExtense(111))
