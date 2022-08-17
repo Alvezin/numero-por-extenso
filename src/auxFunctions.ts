@@ -13,7 +13,12 @@ export function joinNumber(num1:number, num2:number) {
 export function lastArrayItem (array:(string| number)[]) {
     return array[array.length - 1]
 }
-
+export function adjustString(string:string){
+    if(string.charAt(0) === 'e') {
+        const changes = string.replace('e', '').trim()
+        return changes
+    }
+}
 export function checkUndefined(array:(string | number)[],num1Index:number, num2Index:number, num3Index:number){
     if(array[num1Index] === undefined){
         array[num1Index] = 0

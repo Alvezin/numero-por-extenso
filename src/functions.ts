@@ -1,4 +1,4 @@
-import { arrayLength, joinNumber, checkUndefined, getArrayEl } from './auxFunctions'
+import { arrayLength, joinNumber, checkUndefined, getArrayEl, adjustString } from './auxFunctions'
 import { arrayOfNumber, casas, hundredTohundred, imutaveis, tenMutiples } from './arrays'
 
 
@@ -9,13 +9,19 @@ function splitNum(num:number){
     })
 }
 
-function getLessHundred(num1index: number, num2index:number):string {
+function getLessHundred(num1Index: number, num2Index:number):string {
 
-    const firstPart = `${getArrayEl(tenMutiples, arrayOfNumber[num1index]) }`;
+    const joinNumberFunc = joinNumber(arrayOfNumber[num1Index], arrayOfNumber[num2Index])
 
-    const secondPart = `${getArrayEl(imutaveis, arrayOfNumber[num2index])}`;
+    if(joinNumberFunc < 20){
+        return `${arrayLength(arrayOfNumber) > 2 ? 'e ' : ''}${getArrayEl(imutaveis, joinNumberFunc)}`
+    }
 
-    const condition = `${getArrayEl(arrayOfNumber, num2index) >= 1 ? `e ${secondPart}` : ''}`
+    const firstPart = `${getArrayEl(tenMutiples, arrayOfNumber[num1Index]) }`;
+
+    const secondPart = `${getArrayEl(imutaveis, arrayOfNumber[num2Index])}`;
+
+    const condition = `${getArrayEl(arrayOfNumber, num2Index) >= 1 ? `e ${secondPart}` : ''}`
 
     return `${firstPart} ${condition}`
 }
@@ -23,54 +29,50 @@ function getLessHundred(num1index: number, num2index:number):string {
 function getLessThousand(num1Index:number, num2Index:number, num3Index:number){
 
     checkUndefined(arrayOfNumber,num1Index, num2Index, num3Index)
-    
-    const joinNumberFunc = joinNumber(arrayOfNumber[num2Index], arrayOfNumber[num3Index])
-
-    if(joinNumberFunc < 20){
-        return `${getArrayEl(imutaveis, joinNumberFunc)}`
-    }
 
     const oneHundred = getArrayEl(arrayOfNumber,num2Index) === 0 && getArrayEl(arrayOfNumber, num3Index) === 0
 
     if(oneHundred){
         return `${getArrayEl(tenMutiples, arrayOfNumber[num1Index])}`
     }
-
-    const firstPart = `${getArrayEl(hundredTohundred, arrayOfNumber[num1Index])} ${arrayOfNumber.indexOf(arrayOfNumber[num2Index]) > 0 ?  'e' : ''}`;
+    
+    const firstPart = `${getArrayEl(hundredTohundred, arrayOfNumber[num1Index])}`;
 
     const secondPart = `${getLessHundred(num2Index, num3Index)}`;
+    
+    if(getArrayEl(arrayOfNumber, num1Index) === 0){
+        return secondPart
+    }
 
-    return `${firstPart} ${secondPart}`
+    return `${firstPart} e ${secondPart}`
 }
 
 function getNum(){
     let placeCount:number = 0;
     let placeArray = 0
     let count:string | number =  Math.ceil(arrayOfNumber.length / 3)
-    let number = new Array()
+    let number:(string[] | string) = new Array()
     while (count > 0) {
-        const result = `${getLessThousand(arrayLength(arrayOfNumber) - (placeCount + 3), arrayLength(arrayOfNumber) - (placeCount+2), arrayLength(arrayOfNumber) - (placeCount+1))} ${casas[placeArray]}`
-        number.unshift(result)
+        const result = `${
+            getLessThousand(
+                arrayLength(arrayOfNumber) - (placeCount+3), 
+                arrayLength(arrayOfNumber) - (placeCount+2), 
+                arrayLength(arrayOfNumber) - (placeCount+1)
+            )
+        }`
+        const applyPlaces = `${result} ${casas[placeArray]}`
+        number.unshift(applyPlaces)
         placeCount+=3
         placeArray++
         count--
     }
-    return number.join(' ')
+    
+    return adjustString(number.join(' '))
 }
 
 export default function toExtense(num:number){
     splitNum(num)
-    if(num <= 19){
-        return getArrayEl(imutaveis, num)
-    }
-    if(num <= 99){
-        return getLessHundred(0, 1)
-    }
-    if(num <= 999){
-        return getLessThousand(0, 1, 2)
-    }
-    if(num <= 9999999999999){
-        return getNum()
-    }
+    
+    return getNum()
 }
 

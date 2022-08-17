@@ -12,6 +12,6 @@ export const hundredTohundred = [
     'seiscentos', 'setecentos', 'oitocentos', 'novecentos'
 ]
 export const casas = [
-    '','mil', 'milhões'
+    '','mil', 'milhões', 'bilhões','trilhões'
 ]
 export const arrayOfNumber: number[] = new Array();
