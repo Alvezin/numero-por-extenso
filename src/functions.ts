@@ -14,7 +14,7 @@ function getLessHundred(num1Index: number, num2Index:number):string {
     const joinNumberFunc = joinNumber(arrayOfNumber[num1Index], arrayOfNumber[num2Index])
 
     if(joinNumberFunc < 20){
-        return `${arrayLength(arrayOfNumber) > 2 ? 'e ' : ''}${getArrayEl(imutaveis, joinNumberFunc)}`
+        return `${getArrayEl(imutaveis, joinNumberFunc)}`
     }
 
     const firstPart = `${getArrayEl(tenMutiples, arrayOfNumber[num1Index]) }`;
@@ -60,7 +60,12 @@ function getNum(){
                 arrayLength(arrayOfNumber) - (placeCount+1)
             )
         }`
-        const applyPlaces = `${result} ${casas[placeArray]}`
+        const condition = `${
+            arrayOfNumber[arrayLength(arrayOfNumber) - (placeCount+3)] === 0 &&
+            arrayOfNumber[arrayLength(arrayOfNumber) - (placeCount+2)] === 0 &&
+            arrayOfNumber[arrayLength(arrayOfNumber) - (placeCount+1)] === 0 ? '' : casas[placeArray]    
+        }`
+        const applyPlaces = `${result} ${condition}`
         number.unshift(applyPlaces)
         placeCount+=3
         placeArray++
