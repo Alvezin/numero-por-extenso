@@ -1,4 +1,4 @@
-import { arrayOfNumber } from "./arrays"
+import { arrayOfNumber,casas } from "./arrays"
 
 export function getArrayEl(array: (number | string)[], index: number) {
     return array[index]
@@ -37,4 +37,16 @@ export function checkUndefined(array:(string | number)[],num1Index:number, num2I
     if(array[num3Index] === undefined){
         array[num3Index] = 0
     }
+}
+
+export function setCondition(placeCount:number, placeArray:number, count:number) {
+    if(count === Math.ceil(arrayOfNumber.length / 3)) return ''
+    const condition1 = placeArray > 1 ? casas[placeArray] as string : casas[placeArray] + ' e' as string
+    const condition2 =
+        arrayOfNumber[arrayLength(arrayOfNumber) - (placeCount+3)] === 0 &&
+        arrayOfNumber[arrayLength(arrayOfNumber) - (placeCount+2)] >= 0 &&
+        arrayOfNumber[arrayLength(arrayOfNumber) - (placeCount+1)] >= 0 ? condition1 : casas[placeArray]    
+    ;
+
+    return condition2
 }
