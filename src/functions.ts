@@ -33,7 +33,8 @@ function getLessThousand(num1Index:number, num2Index:number, num3Index:number){
     const oneHundred = getArrayEl(arrayOfNumber,num2Index) === 0 && getArrayEl(arrayOfNumber, num3Index) === 0
 
     if(oneHundred){
-        return getArrayEl(tenMutiples, arrayOfNumber[num1Index]) as string
+        if(getArrayEl(arrayOfNumber, num1Index) === 1) return getArrayEl(tenMutiples, arrayOfNumber[num1Index])
+        return getArrayEl(hundredTohundred, arrayOfNumber[num1Index]) as string
     }
     
     const firstPart = getArrayEl(hundredTohundred, arrayOfNumber[num1Index])
@@ -41,7 +42,7 @@ function getLessThousand(num1Index:number, num2Index:number, num3Index:number){
     const secondPart = getLessHundred(num2Index, num3Index);
     
     if(getArrayEl(arrayOfNumber, num1Index) === 0){
-        return `${secondPart}`
+        return secondPart
     }
 
     return `${firstPart} e ${secondPart}`
@@ -74,8 +75,8 @@ function getNum(){
 }
 
 export default function toExtense(num:number){
+    if(num === 0) return imutaveis[num]
     splitNum(num)
-    
     return getNum()
 }
 
