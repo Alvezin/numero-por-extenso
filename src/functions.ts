@@ -33,8 +33,10 @@ function getLessThousand(num1Index:number, num2Index:number, num3Index:number){
     const oneHundred = getArrayEl(arrayOfNumber,num2Index) === 0 && getArrayEl(arrayOfNumber, num3Index) === 0
 
     if(oneHundred){
-        if(getArrayEl(arrayOfNumber, num1Index) === 1) return getArrayEl(tenMutiples, arrayOfNumber[num1Index])
-        return getArrayEl(hundredTohundred, arrayOfNumber[num1Index]) as string
+
+        if(getArrayEl(arrayOfNumber, num1Index) === 1) return 'e ' + getArrayEl(tenMutiples, arrayOfNumber[num1Index])
+
+        return 'e ' + getArrayEl(hundredTohundred, arrayOfNumber[num1Index]) as string
     }
     
     const firstPart = getArrayEl(hundredTohundred, arrayOfNumber[num1Index])
@@ -51,8 +53,8 @@ function getLessThousand(num1Index:number, num2Index:number, num3Index:number){
 function getNum(){
     let placeCount:number = 0;
     let placeArray = 0
-    let count:string | number =  Math.ceil(arrayOfNumber.length / 3)
-    let number:(string[] | string) = new Array()
+    let count:number =  Math.ceil(arrayOfNumber.length / 3)
+    let number:string[] = new Array()
     while (count > 0) {
 
         const result = 
