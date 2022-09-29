@@ -1,48 +1,96 @@
-import { arrayLength, joinNumber, checkUndefined, getArrayEl, adjustString, setCondition } from './auxFunctions'
-import { arrayOfNumber, casas, hundredTohundred, imutaveis, tenMutiples } from './arrays'
+import { arrayLength,
+    joinNumber,
+    checkUndefined, 
+    getArrayEl, 
+    getObjEl,
+    setPlaces,
+    adjustString, 
+} from './auxFunctions'
+import { arrayOfNumber,
+    casas, 
+    imultableNumbers,
+    tenMutiplesNumbers,
+    hundredMultiplesNumbers
+} from './arrays'
 
+
+type indexesObj = {
+    num1Index:number,
+    num2Index:number,
+    num3Index:number
+}
+
+function getIndex(placeCount:number, object:indexesObj){
+    return (
+        object.num1Index = arrayLength(arrayOfNumber) - (placeCount+3),
+        object.num2Index =  arrayLength(arrayOfNumber) - (placeCount+2),
+        object.num3Index =  arrayLength(arrayOfNumber) - (placeCount+1)
+    )
+}
 
 function splitNum(num:number){
-    const splited:(string | number)[] = num.toString().split('')
+    const splited:string[] = num.toString().split('')
     splited.forEach(el => {
-        arrayOfNumber.push(Number(el))
+        arrayOfNumber.push(parseInt(el))
     })
 }
 
-function getLessHundred(num1Index: number, num2Index:number):string {
 
-    const joinNumberFunc = joinNumber(arrayOfNumber[num1Index], arrayOfNumber[num2Index])
+
+function twoDecimalPlaces(num1Index: number, num2Index:number):string {
+    const joinNumberFunc = joinNumber([
+        getArrayEl(arrayOfNumber, num1Index) as number, 
+        getArrayEl(arrayOfNumber, num2Index) as number
+    ])
 
     if(joinNumberFunc < 20){
-        return getArrayEl(imutaveis, joinNumberFunc) as string
+        return getObjEl(imultableNumbers, joinNumberFunc)
     }
 
-    const firstPart = getArrayEl(tenMutiples, arrayOfNumber[num1Index]);
 
-    const secondPart = getArrayEl(imutaveis, arrayOfNumber[num2Index]);
+    //getArrayEl(tenMutiples, getArrayEl(arrayOfNumber, num1Index) as number);
+    const firstPart = getObjEl(tenMutiplesNumbers, getArrayEl(arrayOfNumber, num1Index) as number);
+
+    //getArrayEl(imutaveis, getArrayEl(arrayOfNumber, num2Index) as number); BEFORE
+    const secondPart =  getObjEl(imultableNumbers, getArrayEl(arrayOfNumber, num2Index) as number);
 
     const condition = getArrayEl(arrayOfNumber, num2Index) >= 1 ? `e ${secondPart}` : ''
 
     return `${firstPart} ${condition}`
 }
 
-function getLessThousand(num1Index:number, num2Index:number, num3Index:number){
 
-    checkUndefined(arrayOfNumber,num1Index, num2Index, num3Index)
 
-    const oneHundred = getArrayEl(arrayOfNumber,num2Index) === 0 && getArrayEl(arrayOfNumber, num3Index) === 0
+function threeDecimalPlaces(num1Index:number, num2Index:number, num3Index:number, count:number, lastMember:string){
+    checkUndefined(arrayOfNumber, [num1Index, num2Index, num3Index])
 
-    if(oneHundred){
-
-        if(getArrayEl(arrayOfNumber, num1Index) === 1) return 'e ' + getArrayEl(tenMutiples, arrayOfNumber[num1Index])
-
-        return 'e ' + getArrayEl(hundredTohundred, arrayOfNumber[num1Index]) as string
+    const hundred = getArrayEl(arrayOfNumber,num1Index) > 0 && 
+        getArrayEl(arrayOfNumber,num2Index) === 0 && 
+        getArrayEl(arrayOfNumber, num3Index) === 0
+    ;
+    if(hundred){
+        if(getArrayEl(arrayOfNumber, num1Index) === 1) return getObjEl(hundredMultiplesNumbers, 100)
+        return getObjEl(hundredMultiplesNumbers, getArrayEl(arrayOfNumber, num1Index) as number)
     }
-    
-    const firstPart = getArrayEl(hundredTohundred, arrayOfNumber[num1Index])
 
-    const secondPart = getLessHundred(num2Index, num3Index);
-    
+    if(
+        joinNumber([
+            getArrayEl(arrayOfNumber,num1Index) as number,
+            getArrayEl(arrayOfNumber, num2Index) as number,
+            getArrayEl(arrayOfNumber, num3Index) as number
+        ]) === 0
+    ){
+        console.log(count)
+        if(lastMember){
+            if(lastMember.trim() === "e" || lastMember.trim() === "" ) return ''
+        }
+        return count === Math.ceil(arrayOfNumber.length / 3) ? '' : "e"
+    }
+
+
+    const firstPart = getObjEl(hundredMultiplesNumbers, getArrayEl(arrayOfNumber, num1Index) as number);
+    const secondPart = twoDecimalPlaces(num2Index, num3Index);
+
     if(getArrayEl(arrayOfNumber, num1Index) === 0){
         return secondPart
     }
@@ -50,23 +98,37 @@ function getLessThousand(num1Index:number, num2Index:number, num3Index:number){
     return `${firstPart} e ${secondPart}`
 }
 
+
+
 function getNum(){
     let placeCount:number = 0;
     let placeArray = 0
     let count:number =  Math.ceil(arrayOfNumber.length / 3)
     let number:string[] = new Array()
     while (count > 0) {
+        
+        let indexes = {
+            num1Index: 0,
+            num2Index: 0,
+            num3Index: 0
+        }
 
-        const result = 
-            getLessThousand(
-                arrayLength(arrayOfNumber) - (placeCount+3), 
-                arrayLength(arrayOfNumber) - (placeCount+2), 
-                arrayLength(arrayOfNumber) - (placeCount+1)
+        getIndex(placeCount, indexes)
+        if(count === 1){
+            checkUndefined(arrayOfNumber,[indexes.num1Index, indexes.num2Index, indexes.num3Index])
+            getIndex(placeCount, indexes)
+        }
+
+        let result = 
+            threeDecimalPlaces(
+                indexes.num1Index, 
+                indexes.num2Index, 
+                indexes.num3Index,
+                count,
+                number[0]
             )
         ;
-
-        const applyPlaces = `${result} ${setCondition(placeCount, placeArray, count)}`
-
+        const applyPlaces = `${result} ${setPlaces(placeCount, placeArray, count)}`
         number.unshift(applyPlaces)
         placeCount+=3
         placeArray++
@@ -76,8 +138,10 @@ function getNum(){
     return adjustString(number.join(' '))
 }
 
+
+
 export default function toExtense(num:number){
-    if(num === 0) return imutaveis[num]
+    if(num === 0 )return imultableNumbers[0]
     splitNum(num)
     return getNum()
 }
