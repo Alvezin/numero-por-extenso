@@ -1,4 +1,5 @@
-import { arrayLength,
+import { 
+    arrayLength,
     joinNumber,
     checkUndefined, 
     getArrayEl, 
@@ -6,7 +7,8 @@ import { arrayLength,
     setPlaces,
     adjustString, 
 } from './auxFunctions'
-import { arrayOfNumber,
+import { 
+    arrayOfNumber,
     imultableNumbers,
     tenMutiplesNumbers,
     hundredMultiplesNumbers
@@ -78,9 +80,7 @@ function threeDecimalPlaces(num1Index:number, num2Index:number, num3Index:number
         return getObjEl(hundredMultiplesNumbers, getArrayEl(arrayOfNumber, num1Index) as number)
     }
 
-    if(
-        allZero
-    ){
+    if( allZero ){
         if(lastMember){
             if(lastMember.trim() === "e" || lastMember.trim() === "" ) return ''
         }
@@ -142,7 +142,9 @@ function getNum(){
 
 export default function toExtense(num:number){
     if(num === 0 )return imultableNumbers[0]
+    const split = splitNum
+    const get = getNum
     splitNum(num)
-    return getNum()
+    return get()
 }
 
