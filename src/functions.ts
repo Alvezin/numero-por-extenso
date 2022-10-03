@@ -7,14 +7,13 @@ import { arrayLength,
     adjustString, 
 } from './auxFunctions'
 import { arrayOfNumber,
-    casas, 
     imultableNumbers,
     tenMutiplesNumbers,
     hundredMultiplesNumbers
 } from './arrays'
 
 
-type indexesObj = {
+interface indexesObj  {
     num1Index:number,
     num2Index:number,
     num3Index:number
@@ -23,8 +22,8 @@ type indexesObj = {
 function getIndex(placeCount:number, object:indexesObj){
     return (
         object.num1Index = arrayLength(arrayOfNumber) - (placeCount+3),
-        object.num2Index =  arrayLength(arrayOfNumber) - (placeCount+2),
-        object.num3Index =  arrayLength(arrayOfNumber) - (placeCount+1)
+        object.num2Index = arrayLength(arrayOfNumber) - (placeCount+2),
+        object.num3Index = arrayLength(arrayOfNumber) - (placeCount+1)
     )
 }
 
@@ -37,21 +36,20 @@ function splitNum(num:number){
 
 
 
-function twoDecimalPlaces(num1Index: number, num2Index:number):string {
+function twoDecimalPlaces(num1Index: number, num2Index:number, count:number):string {
     const joinNumberFunc = joinNumber([
         getArrayEl(arrayOfNumber, num1Index) as number, 
         getArrayEl(arrayOfNumber, num2Index) as number
     ])
-
     if(joinNumberFunc < 20){
-        return getObjEl(imultableNumbers, joinNumberFunc)
+        const condition = count === Math.ceil(arrayOfNumber.length / 3) && 
+            arrayLength(arrayOfNumber) > 3  ? "e " : ""
+        return condition + getObjEl(imultableNumbers, joinNumberFunc)
     }
 
 
-    //getArrayEl(tenMutiples, getArrayEl(arrayOfNumber, num1Index) as number);
     const firstPart = getObjEl(tenMutiplesNumbers, getArrayEl(arrayOfNumber, num1Index) as number);
 
-    //getArrayEl(imutaveis, getArrayEl(arrayOfNumber, num2Index) as number); BEFORE
     const secondPart =  getObjEl(imultableNumbers, getArrayEl(arrayOfNumber, num2Index) as number);
 
     const condition = getArrayEl(arrayOfNumber, num2Index) >= 1 ? `e ${secondPart}` : ''
@@ -62,7 +60,14 @@ function twoDecimalPlaces(num1Index: number, num2Index:number):string {
 
 
 function threeDecimalPlaces(num1Index:number, num2Index:number, num3Index:number, count:number, lastMember:string){
+    
     checkUndefined(arrayOfNumber, [num1Index, num2Index, num3Index])
+    const allZero = joinNumber([
+        getArrayEl(arrayOfNumber,num1Index) as number,
+        getArrayEl(arrayOfNumber, num2Index) as number,
+        getArrayEl(arrayOfNumber, num3Index) as number
+    ]) === 0
+
 
     const hundred = getArrayEl(arrayOfNumber,num1Index) > 0 && 
         getArrayEl(arrayOfNumber,num2Index) === 0 && 
@@ -74,13 +79,8 @@ function threeDecimalPlaces(num1Index:number, num2Index:number, num3Index:number
     }
 
     if(
-        joinNumber([
-            getArrayEl(arrayOfNumber,num1Index) as number,
-            getArrayEl(arrayOfNumber, num2Index) as number,
-            getArrayEl(arrayOfNumber, num3Index) as number
-        ]) === 0
+        allZero
     ){
-        console.log(count)
         if(lastMember){
             if(lastMember.trim() === "e" || lastMember.trim() === "" ) return ''
         }
@@ -89,7 +89,7 @@ function threeDecimalPlaces(num1Index:number, num2Index:number, num3Index:number
 
 
     const firstPart = getObjEl(hundredMultiplesNumbers, getArrayEl(arrayOfNumber, num1Index) as number);
-    const secondPart = twoDecimalPlaces(num2Index, num3Index);
+    const secondPart = twoDecimalPlaces(num2Index, num3Index, count);
 
     if(getArrayEl(arrayOfNumber, num1Index) === 0){
         return secondPart
